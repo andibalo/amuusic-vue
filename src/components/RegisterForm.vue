@@ -179,6 +179,8 @@
   </div>
 </template>
 <script>
+import { auth, db, usersCollection } from "../includes/firebase";
+
 export default {
   name: "RegisterForm",
   data() {
@@ -188,7 +190,7 @@ export default {
         email: "required|min:3|max:100|email",
         age: "required|min_value:13|max_value:100",
         password: "required",
-        confirm_password: "passwords_mismatch@password",
+        confirm_password: "passwords_mismatch:@password",
         country: "required",
         tos: "tos",
       },
@@ -203,13 +205,35 @@ export default {
   },
 
   methods: {
-    register(values) {
+    async register(values) {
       this.reg_in_submission = true;
       this.reg_show_alert = true;
       this.reg_alert_variant = "bg-blue-500";
       this.reg_alert_msg = "Please wait! Your account is being created.";
 
-      console.log(values);
+      try {
+        const user = await auth.createUserWithEmailAndPassword(
+          auth.getAuth(),
+          values.email,
+          values.password
+        );
+
+        await db.addDoc(usersCollection, {
+          name: values.name,
+          email: values.email,
+          age: values.age,
+          country: values.country,
+        });
+
+        this.reg_in_submission = false;
+        this.reg_alert_variant = "bg-green-500";
+        this.reg_alert_msg = "Success! Your account has been created";
+      } catch (error) {
+        console.log(error);
+        this.reg_in_submission = false;
+        this.reg_alert_variant = "bg-red-500";
+        this.reg_alert_msg = "Error Occured! Please try again later.";
+      }
     },
   },
 };
