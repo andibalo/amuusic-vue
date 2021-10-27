@@ -179,8 +179,6 @@
   </div>
 </template>
 <script>
-import { auth, db, usersCollection } from "../includes/firebase";
-
 export default {
   name: "RegisterForm",
   data() {
@@ -212,22 +210,11 @@ export default {
       this.reg_alert_msg = "Please wait! Your account is being created.";
 
       try {
-        const user = await auth.createUserWithEmailAndPassword(
-          auth.getAuth(),
-          values.email,
-          values.password
-        );
-
-        await db.addDoc(usersCollection, {
-          name: values.name,
-          email: values.email,
-          age: values.age,
-          country: values.country,
-        });
-
+        await this.$store.dispatch("register", values);
         this.reg_in_submission = false;
         this.reg_alert_variant = "bg-green-500";
         this.reg_alert_msg = "Success! Your account has been created";
+        window.location.reload();
       } catch (error) {
         console.log(error);
         this.reg_in_submission = false;
