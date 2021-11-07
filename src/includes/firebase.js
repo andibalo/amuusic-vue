@@ -15,5 +15,6 @@ const firebaseConfig = {
 initializeApp(firebaseConfig);
 
 const usersCollection = db.collection(db.getFirestore(), "users");
+const songsCollection = db.collection(db.getFirestore(), "songs");
 
-export { auth, db, storage, usersCollection };
+export { auth, db, storage, usersCollection, songsCollection };

@@ -33,6 +33,7 @@
       >
         <h5>Drop your files here</h5>
       </div>
+      <input type="file" multiple @change="upload($event)" />
       <hr class="my-6" />
       <div class="mb-4" v-for="upload in uploads" :key="upload.name">
         <div class="font-bold text-sm" :class="upload.text_class">
@@ -50,7 +51,7 @@
   </div>
 </template>
 <script>
-import { storage } from "../includes/firebase";
+import { storage, auth, db, songsCollection } from "../includes/firebase";
 
 export default {
   name: "Upload",
@@ -60,11 +61,14 @@ export default {
       uploads: [],
     };
   },
+  props: ["addSong"],
   methods: {
     upload(event) {
       this.is_dragover = false;
 
-      const files = [...event.dataTransfer.files];
+      const files = event.dataTransfer
+        ? [...event.dataTransfer.files]
+        : [...event.target.files];
 
       files.forEach((file) => {
         if (file.type !== "audio/mpeg") {
@@ -102,19 +106,39 @@ export default {
             this.uploads[uploadIndex].text_class = "text-red-400";
             console.log(error);
           },
-          () => {
+          async () => {
+            const song = {
+              uid: auth.getAuth().currentUser.uid,
+              display_name: auth.getAuth().currentUser.displayName,
+              original_name: uploadTask.snapshot.ref.name,
+              modified_name: uploadTask.snapshot.ref.name,
+              genre: "",
+              comment_count: 0,
+            };
+
+            const downloadUrl = await storage.getDownloadURL(
+              uploadTask.snapshot.ref
+            );
+            console.log(downloadUrl);
+
+            song.url = downloadUrl;
+
+            const songRef = await db.addDoc(songsCollection, song);
+            const songSnap = await db.getDoc(songRef);
+
+            this.addSong(songSnap);
             this.uploads[uploadIndex].variant = "bg-green-400";
             this.uploads[uploadIndex].icon = "fas fa-check";
             this.uploads[uploadIndex].text_class = "text-green-400";
-            storage
-              .getDownloadURL(uploadTask.snapshot.ref)
-              .then((downloadURL) => {
-                console.log("File available at", downloadURL);
-              });
           }
         );
       });
     },
+  },
+  beforeUnmount() {
+    this.uploads.forEach((upload) => {
+      upload.task.cancel();
+    });
   },
 };
 </script>
