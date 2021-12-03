@@ -92,22 +92,22 @@
 </template>
 
 <script>
-import { mapMutations, mapState } from 'vuex';
-import LoginForm from './LoginForm.vue';
-import RegisterForm from './RegisterForm.vue';
+import { mapMutations, mapState } from "vuex";
+import LoginForm from "./LoginForm.vue";
+import RegisterForm from "./RegisterForm.vue";
 
 export default {
-  name: 'AuthModal',
+  name: "AuthModal",
   data() {
     return {
-      tab: 'login',
+      tab: "login",
     };
   },
   computed: {
-    ...mapState(['authModalShow']),
+    ...mapState(["authModalShow"]),
   },
   methods: {
-    ...mapMutations(['toggleAuthModal']),
+    ...mapMutations(["toggleAuthModal"]),
   },
   components: {
     LoginForm,

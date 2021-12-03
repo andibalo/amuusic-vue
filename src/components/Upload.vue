@@ -51,19 +51,17 @@
   </div>
 </template>
 <script>
-import {
-  storage, auth, db, songsCollection,
-} from '../includes/firebase';
+import { storage, auth, db, songsCollection } from "../includes/firebase";
 
 export default {
-  name: 'Upload',
+  name: "Upload",
   data() {
     return {
       is_dragover: false,
       uploads: [],
     };
   },
-  props: ['addSong'],
+  props: ["addSong"],
   methods: {
     upload(event) {
       this.is_dragover = false;
@@ -73,37 +71,39 @@ export default {
         : [...event.target.files];
 
       files.forEach((file) => {
-        if (file.type !== 'audio/mpeg') {
+        if (file.type !== "audio/mpeg") {
           return;
         }
 
         const songsRef = storage.ref(
           storage.getStorage(),
-          `songs/${file.name}`,
+          `songs/${file.name}`
         );
 
         const uploadTask = storage.uploadBytesResumable(songsRef, file);
 
-        const uploadIndex = this.uploads.push({
-          task: uploadTask,
-          current_progress: 0,
-          name: file.name,
-          variant: 'bg-blue-400',
-          icon: 'fas fa-spinner fa-spin',
-          text_class: '',
-        }) - 1;
+        const uploadIndex =
+          this.uploads.push({
+            task: uploadTask,
+            current_progress: 0,
+            name: file.name,
+            variant: "bg-blue-400",
+            icon: "fas fa-spinner fa-spin",
+            text_class: "",
+          }) - 1;
 
         uploadTask.on(
-          'state_changed',
+          "state_changed",
           (snapshot) => {
-            const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+            const progress =
+              (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
 
             this.uploads[uploadIndex].current_progress = progress;
           },
           (error) => {
-            this.uploads[uploadIndex].variant = 'bg-red-400';
-            this.uploads[uploadIndex].icon = 'fas fa-times';
-            this.uploads[uploadIndex].text_class = 'text-red-400';
+            this.uploads[uploadIndex].variant = "bg-red-400";
+            this.uploads[uploadIndex].icon = "fas fa-times";
+            this.uploads[uploadIndex].text_class = "text-red-400";
             console.log(error);
           },
           async () => {
@@ -112,12 +112,12 @@ export default {
               display_name: auth.getAuth().currentUser.displayName,
               original_name: uploadTask.snapshot.ref.name,
               modified_name: uploadTask.snapshot.ref.name,
-              genre: '',
+              genre: "",
               comment_count: 0,
             };
 
             const downloadUrl = await storage.getDownloadURL(
-              uploadTask.snapshot.ref,
+              uploadTask.snapshot.ref
             );
             console.log(downloadUrl);
 
@@ -127,10 +127,10 @@ export default {
             const songSnap = await db.getDoc(songRef);
 
             this.addSong(songSnap);
-            this.uploads[uploadIndex].variant = 'bg-green-400';
-            this.uploads[uploadIndex].icon = 'fas fa-check';
-            this.uploads[uploadIndex].text_class = 'text-green-400';
-          },
+            this.uploads[uploadIndex].variant = "bg-green-400";
+            this.uploads[uploadIndex].icon = "fas fa-check";
+            this.uploads[uploadIndex].text_class = "text-green-400";
+          }
         );
       });
     },

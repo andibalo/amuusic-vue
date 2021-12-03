@@ -117,37 +117,37 @@
   </div>
 </template>
 <script>
-import { mapState } from 'vuex';
-import { db, auth, commentsCollection } from '../includes/firebase';
+import { mapState } from "vuex";
+import { db, auth, commentsCollection } from "../includes/firebase";
 
 export default {
-  name: 'Song',
+  name: "Song",
   data() {
     return {
       song: {},
       comments: [],
       schema: {
-        comment: 'required|min:3',
+        comment: "required|min:3",
       },
       comment_in_submission: false,
       comment_show_alert: false,
-      comment_alert_variant: 'bg-blue-500',
-      comment_alert_message: 'Please wait! Your comment is being submitted',
-      sort: '1',
+      comment_alert_variant: "bg-blue-500",
+      comment_alert_message: "Please wait! Your comment is being submitted",
+      sort: "1",
     };
   },
   async created() {
-    const docRef = db.doc(db.getFirestore(), 'songs', this.$route.params.id);
+    const docRef = db.doc(db.getFirestore(), "songs", this.$route.params.id);
     const docSnap = await db.getDoc(docRef);
 
     if (!docSnap.exists()) {
-      this.$router.push({ name: 'Home' });
+      this.$router.push({ name: "Home" });
       return;
     }
 
     const { sort } = this.$route.query;
 
-    this.sort = sort === '1' || sort === '2' ? sort : '1';
+    this.sort = sort === "1" || sort === "2" ? sort : "1";
 
     this.song = docSnap.data();
     this.getComments();
@@ -156,8 +156,9 @@ export default {
     async addComment(values, { resetForm }) {
       this.comment_in_submission = true;
       this.comment_show_alert = true;
-      this.comment_alert_variant = 'bg-blue-500';
-      this.comment_alert_message = 'Please wait! Your comment is being submitted';
+      this.comment_alert_variant = "bg-blue-500";
+      this.comment_alert_message =
+        "Please wait! Your comment is being submitted";
 
       const comment = {
         content: values.comment,
@@ -171,7 +172,7 @@ export default {
 
       this.song.comment_count += 1;
 
-      const songRef = db.doc(db.getFirestore(), 'songs', this.$route.params.id);
+      const songRef = db.doc(db.getFirestore(), "songs", this.$route.params.id);
 
       await db.updateDoc(songRef, {
         comment_count: this.song.comment_count,
@@ -180,15 +181,15 @@ export default {
       this.getComments();
 
       this.comment_in_submission = false;
-      this.comment_alert_variant = 'bg-green-500';
-      this.comment_alert_message = 'Comment added!';
+      this.comment_alert_variant = "bg-green-500";
+      this.comment_alert_message = "Comment added!";
 
       resetForm();
     },
     async getComments() {
       const q = db.query(
         commentsCollection,
-        db.where('sid', '==', this.$route.params.id),
+        db.where("sid", "==", this.$route.params.id)
       );
 
       const querySnapshot = await db.getDocs(q);
@@ -204,10 +205,10 @@ export default {
     },
   },
   computed: {
-    ...mapState(['userLoggedIn']),
+    ...mapState(["userLoggedIn"]),
     sortedComments() {
       return this.comments.slice().sort((a, b) => {
-        if (this.sort === '1') {
+        if (this.sort === "1") {
           return new Date(b.datePosted) - new Date(a.datePosted);
         }
 

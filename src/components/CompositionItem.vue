@@ -101,10 +101,10 @@
   </div>
 </template>
 <script>
-import { db, storage } from '../includes/firebase';
+import { db, storage } from "../includes/firebase";
 
 export default {
-  name: 'CompositionItem',
+  name: "CompositionItem",
   props: {
     song: {
       type: Object,
@@ -130,23 +130,23 @@ export default {
     return {
       showForm: false,
       schema: {
-        modified_name: 'required',
-        genre: 'alpha_spaces',
+        modified_name: "required",
+        genre: "alpha_spaces",
       },
       in_submission: false,
       show_alert: false,
-      alert_variant: 'bg-blue-500',
-      alert_message: 'Please Wait! Updating song info...',
+      alert_variant: "bg-blue-500",
+      alert_message: "Please Wait! Updating song info...",
     };
   },
   methods: {
     async edit(values) {
       this.in_submission = true;
       this.show_alert = true;
-      this.alert_variant = 'bg-blue-500';
-      this.alert_message = 'Please Wait! Updating song info...';
+      this.alert_variant = "bg-blue-500";
+      this.alert_message = "Please Wait! Updating song info...";
 
-      const songRef = db.doc(db.getFirestore(), 'songs', this.song.docID);
+      const songRef = db.doc(db.getFirestore(), "songs", this.song.docID);
 
       try {
         await db.updateDoc(songRef, values);
@@ -155,22 +155,22 @@ export default {
         this.updateSong(this.index, values);
 
         this.in_submission = false;
-        this.alert_variant = 'bg-green-500';
-        this.alert_message = 'Successfully updated.';
+        this.alert_variant = "bg-green-500";
+        this.alert_message = "Successfully updated.";
       } catch (error) {
         this.in_submission = false;
-        this.alert_variant = 'bg-red-500';
-        this.alert_message = 'Something went wrong. Please try again later.';
+        this.alert_variant = "bg-red-500";
+        this.alert_message = "Something went wrong. Please try again later.";
       }
     },
     async deleteSong() {
       const songRef = storage.ref(
         storage.getStorage(),
-        `songs/${this.song.original_name}`,
+        `songs/${this.song.original_name}`
       );
 
       await storage.deleteObject(songRef);
-      await db.deleteDoc(db.doc(db.getFirestore(), 'songs', this.song.docID));
+      await db.deleteDoc(db.doc(db.getFirestore(), "songs", this.song.docID));
 
       this.removeSong(this.index);
     },

@@ -112,12 +112,12 @@
 </template>
 
 <script>
-import AppHeader from './components/Header.vue';
-import AuthModal from './components/AuthModal.vue';
-import { auth } from './includes/firebase';
+import AppHeader from "./components/Header.vue";
+import AuthModal from "./components/AuthModal.vue";
+import { auth } from "./includes/firebase";
 
 export default {
-  name: 'App',
+  name: "App",
   components: {
     AppHeader,
     AuthModal,
@@ -126,7 +126,7 @@ export default {
     auth.onAuthStateChanged(auth.getAuth(), (user) => {
       console.log(user);
       if (user) {
-        this.$store.dispatch('init_login');
+        this.$store.dispatch("init_login");
       }
     });
   },

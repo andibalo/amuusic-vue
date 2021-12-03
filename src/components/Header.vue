@@ -43,18 +43,18 @@
 </template>
 
 <script>
-import { mapMutations, mapState } from 'vuex';
+import { mapMutations, mapState } from "vuex";
 
 export default {
-  name: 'Header',
+  name: "Header",
   computed: {
-    ...mapState(['userLoggedIn']),
+    ...mapState(["userLoggedIn"]),
   },
   methods: {
-    ...mapMutations(['toggleAuthModal']),
+    ...mapMutations(["toggleAuthModal"]),
     signout() {
-      this.$store.dispatch('signOut');
-      this.$router.push({ name: 'Home' });
+      this.$store.dispatch("signOut");
+      this.$router.push({ name: "Home" });
     },
   },
 };

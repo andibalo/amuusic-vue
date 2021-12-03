@@ -39,11 +39,11 @@
   </section>
 </template>
 <script>
-import { songsCollection, db } from '../includes/firebase';
-import SongItem from '../components/SongItem.vue';
+import { songsCollection, db } from "../includes/firebase";
+import SongItem from "../components/SongItem.vue";
 
 export default {
-  name: 'Home',
+  name: "Home",
   components: {
     SongItem,
   },
@@ -57,10 +57,10 @@ export default {
   async created() {
     this.getSongs();
 
-    window.addEventListener('scroll', this.handleScroll);
+    window.addEventListener("scroll", this.handleScroll);
   },
   beforeUnmount() {
-    window.removeEventListener('scroll', this.handleScroll);
+    window.removeEventListener("scroll", this.handleScroll);
   },
   methods: {
     handleScroll() {
@@ -83,20 +83,20 @@ export default {
 
       if (this.songs.length) {
         const lastDocSnap = await db.getDoc(
-          db.doc(songsCollection, this.songs[this.songs.length - 1].docID),
+          db.doc(songsCollection, this.songs[this.songs.length - 1].docID)
         );
 
         q = db.query(
           songsCollection,
-          db.orderBy('modified_name'),
+          db.orderBy("modified_name"),
           db.startAfter(lastDocSnap),
-          db.limit(this.maxPerPage),
+          db.limit(this.maxPerPage)
         );
       } else {
         q = db.query(
           songsCollection,
-          db.orderBy('modified_name'),
-          db.limit(this.maxPerPage),
+          db.orderBy("modified_name"),
+          db.limit(this.maxPerPage)
         );
       }
 

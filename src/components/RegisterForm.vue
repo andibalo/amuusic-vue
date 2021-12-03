@@ -180,25 +180,25 @@
 </template>
 <script>
 export default {
-  name: 'RegisterForm',
+  name: "RegisterForm",
   data() {
     return {
       schema: {
-        name: 'required|min:3|max:100|alpha_spaces',
-        email: 'required|min:3|max:100|email',
-        age: 'required|min_value:13|max_value:100',
-        password: 'required',
-        confirm_password: 'passwords_mismatch:@password',
-        country: 'required',
-        tos: 'tos',
+        name: "required|min:3|max:100|alpha_spaces",
+        email: "required|min:3|max:100|email",
+        age: "required|min_value:13|max_value:100",
+        password: "required",
+        confirm_password: "passwords_mismatch:@password",
+        country: "required",
+        tos: "tos",
       },
       userData: {
-        country: 'USA',
+        country: "USA",
       },
       reg_in_submission: false,
       reg_show_alert: false,
-      reg_alert_variant: 'bg-blue-500',
-      reg_alert_msg: 'Please wait! Your account is being created.',
+      reg_alert_variant: "bg-blue-500",
+      reg_alert_msg: "Please wait! Your account is being created.",
     };
   },
 
@@ -206,20 +206,20 @@ export default {
     async register(values) {
       this.reg_in_submission = true;
       this.reg_show_alert = true;
-      this.reg_alert_variant = 'bg-blue-500';
-      this.reg_alert_msg = 'Please wait! Your account is being created.';
+      this.reg_alert_variant = "bg-blue-500";
+      this.reg_alert_msg = "Please wait! Your account is being created.";
 
       try {
-        await this.$store.dispatch('register', values);
+        await this.$store.dispatch("register", values);
         this.reg_in_submission = false;
-        this.reg_alert_variant = 'bg-green-500';
-        this.reg_alert_msg = 'Success! Your account has been created';
+        this.reg_alert_variant = "bg-green-500";
+        this.reg_alert_msg = "Success! Your account has been created";
         window.location.reload();
       } catch (error) {
         console.log(error);
         this.reg_in_submission = false;
-        this.reg_alert_variant = 'bg-red-500';
-        this.reg_alert_msg = 'Error Occured! Please try again later.';
+        this.reg_alert_variant = "bg-red-500";
+        this.reg_alert_msg = "Error Occured! Please try again later.";
       }
     },
   },

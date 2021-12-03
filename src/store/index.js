@@ -1,6 +1,6 @@
-import { signOut } from '@firebase/auth';
-import { createStore } from 'vuex';
-import { auth, db } from '../includes/firebase';
+import { signOut } from "@firebase/auth";
+import { createStore } from "vuex";
+import { auth, db } from "../includes/firebase";
 
 export default createStore({
   state: {
@@ -22,16 +22,16 @@ export default createStore({
     async login({ commit }, payload) {
       await auth.signInWithEmailAndPassword(auth.getAuth(), payload.email, payload.password);
 
-      commit('toggleAuth');
+      commit("toggleAuth");
     },
     async register({ commit }, payload) {
       const userCred = await auth.createUserWithEmailAndPassword(
         auth.getAuth(),
         payload.email,
-        payload.password,
+        payload.password
       );
 
-      await db.setDoc(db.doc(db.getFirestore(), 'users', userCred.user.uid), {
+      await db.setDoc(db.doc(db.getFirestore(), "users", userCred.user.uid), {
         name: payload.name,
         email: payload.email,
         age: payload.age,
@@ -42,15 +42,15 @@ export default createStore({
         displayName: payload.name,
       });
 
-      commit('toggleAuth');
+      commit("toggleAuth");
     },
     async signOut({ commit }) {
       await auth.signOut(auth.getAuth());
 
-      commit('toggleAuth');
+      commit("toggleAuth");
     },
     init_login({ commit }) {
-      commit('toggleAuth');
+      commit("toggleAuth");
     },
   },
 });

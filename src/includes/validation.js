@@ -4,7 +4,7 @@ import {
   defineRule,
   ErrorMessage,
   configure,
-} from 'vee-validate';
+} from "vee-validate";
 import {
   required,
   min,
@@ -14,23 +14,23 @@ import {
   min_value as minimumValue,
   max_value as maximumValue,
   confirmed,
-} from '@vee-validate/rules';
+} from "@vee-validate/rules";
 
 export default {
   install(app) {
-    app.component('VeeField', VeeField);
-    app.component('VeeForm', VeeForm);
-    app.component('ErrorMessage', ErrorMessage);
+    app.component("VeeField", VeeField);
+    app.component("VeeForm", VeeForm);
+    app.component("ErrorMessage", ErrorMessage);
 
-    defineRule('required', required);
-    defineRule('tos', required);
-    defineRule('min', min);
-    defineRule('max', max);
-    defineRule('alpha_spaces', alphaSpaces);
-    defineRule('email', email);
-    defineRule('min_value', minimumValue);
-    defineRule('max_value', maximumValue);
-    defineRule('passwords_mismatch', confirmed);
+    defineRule("required", required);
+    defineRule("tos", required);
+    defineRule("min", min);
+    defineRule("max", max);
+    defineRule("alpha_spaces", alphaSpaces);
+    defineRule("email", email);
+    defineRule("min_value", minimumValue);
+    defineRule("max_value", maximumValue);
+    defineRule("passwords_mismatch", confirmed);
 
     configure({
       generateMessage: (ctx) => {
@@ -40,8 +40,8 @@ export default {
           max: `The field ${ctx.field} is too long.`,
           alpha_spaces: `The field ${ctx.field} must only contain alphabets and spaces.`,
           email: `The field ${ctx.field} must be in valid email format.`,
-          passwords_mismatch: 'Passwords do not match',
-          tos: 'You must accept the terms of service',
+          passwords_mismatch: "Passwords do not match",
+          tos: "You must accept the terms of service",
         };
 
         const message = messages[ctx.rule.name]
