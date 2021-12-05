@@ -7,5 +7,6 @@ import VeevalidatePlugin from "./includes/validation";
 import "./includes/firebase";
 import "./assets/tailwind.css";
 import "./assets/main.css";
+import i18n from './i18n'
 
-createApp(App).use(store).use(router).use(VeevalidatePlugin).mount("#app");
+createApp(App).use(i18n).use(store).use(router).use(VeevalidatePlugin).mount("#app");
